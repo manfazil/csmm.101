@@ -178,6 +178,37 @@ def bfs_search(initial_state):
 
     """BFS search"""
 
+    frontier=Q.Queue()
+    frontier.put(initial_state)
+    explored = set()
+
+    path_to_goal=[]
+    cost_of_path=len(path_to_goal)
+    res={}
+    search_depth=max_search_depth=running_time=max_ram_usage=0
+    
+    while frontier:
+        state = frontier.get()
+        explored.add(state)
+        if test_goal(state):
+            res["path_to_goal"]=path_to_goal
+			res["cost_of_path"]=cost_of_path
+			res["nodes_expanded"]=nodes_expanded
+			res["search_depth"]=search_depth
+			res["max_search_depth"]=max_search_depth
+			
+            return res
+
+        for neighbor in state.expand():
+			nodes_expanded+=len(state.expand)
+			search_depth+=1
+			if search_depth > max_search_depth: max_search_depth=search_depth		
+            if neighbor not in frontier and neighbor not in explored:
+                frontier.put(neighbor)
+	return False
+    
+    
+
     ### STUDENT CODE GOES HERE ###
 
 def dfs_search(initial_state):
@@ -205,13 +236,11 @@ def calculate_manhattan_dist(state):
     posIdeal=[(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
     n=3
     distancia=0
-    posAtual={}
     for i,item in enumerate(state):
         if item !=0:
             curX=i/n
             curY=i%n
             offset= abs(curX-posIdeal[item-1][0])+abs(curY-posIdeal[item-1][1])
-            posAtual[item]=offset
             distancia+=offset            
     return distancia
                         
@@ -221,6 +250,7 @@ def test_goal(puzzle_state):
     """test the state is the goal state or not"""
 
     ### STUDENT CODE GOES HERE ###
+    return puzzle_state==[0,1,2,3,4,5,6,7,8]
 
 # Main Function that reads in Input and Runs corresponding Algorithm
 
