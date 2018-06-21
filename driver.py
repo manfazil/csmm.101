@@ -198,11 +198,23 @@ def calculate_total_cost(state):
 
     ### STUDENT CODE GOES HERE ###
 
-def calculate_manhattan_dist(idx, value, n):
+def calculate_manhattan_dist(state):
 
     """calculatet the manhattan distance of a tile"""
 
-    ### STUDENT CODE GOES HERE ###
+    posIdeal=[(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
+    n=3
+    distancia=0
+    posAtual={}
+    for i,item in enumerate(state):
+        if item !=0:
+            curX=i/n
+            curY=i%n
+            offset= abs(curX-posIdeal[item-1][0])+abs(curY-posIdeal[item-1][1])
+            posAtual[item]=offset
+            distancia+=offset            
+    return distancia
+                        
 
 def test_goal(puzzle_state):
 
