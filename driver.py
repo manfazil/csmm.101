@@ -2,7 +2,7 @@ import Queue as Q
 
 import time
 
-import resource
+#import resource
 
 import sys
 
@@ -171,6 +171,7 @@ class PuzzleState(object):
 ### Students need to change the method to have the corresponding parameters
 
 def writeOutput():
+	pass
 
     ### Student Code Goes here
 
@@ -191,25 +192,25 @@ def bfs_search(initial_state):
         state = frontier.get()
         
         if test_goal(state):
-                path_to_goal=printCaminho(state,caminho)            
-                res["path_to_goal"]=path_to_goal
-	        res["cost_of_path"]=len(path_to_goal)
-		res["nodes_expanded"]=nodes_expanded
-		res["search_depth"]=search_depth
-		res["max_search_depth"]=max_search_depth
-			
-            return res
+            path_to_goal=printCaminho(state,caminho)
+            res["path_to_goal"]=path_to_goal
+            res["cost_of_path"]=len(path_to_goal)
+            res["nodes_expanded"]=nodes_expanded
+            res["search_depth"]=search_depth
+            res["max_search_depth"]=max_search_depth
+            
+        return res
         filhosNo=state.expand()
         for (neighbor,action) in filhosNo:
-	    nodes_expanded+=len(filhosNo)
-	    search_depth+=1
-	    if search_depth > max_search_depth: max_search_depth=search_depth		
+            nodes_expanded+=len(filhosNo)
+            search_depth+=1
+            if search_depth > max_search_depth: max_search_depth=search_depth       
             if neighbor not in frontier and neighbor not in explored:
-		caminho[neighbor]=(state,action)
+                caminho[neighbor]=(state,action)
                 frontier.put(neighbor)
-	explored.add(state)	
+    explored.add(state)	
 	#verificando git
-	return False
+    return False
 
 def printCaminho(state,caminho):
         lista=[]
