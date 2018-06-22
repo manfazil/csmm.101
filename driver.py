@@ -144,25 +144,25 @@ class PuzzleState(object):
 
             if up_child is not None:
 
-                self.children.append(up_child)
+                self.children.append((up_child,"UP"))
 
             down_child = self.move_down()
 
             if down_child is not None:
 
-                self.children.append(down_child)
+                self.children.append((down_child,"DOWN"))
 
             left_child = self.move_left()
 
             if left_child is not None:
 
-                self.children.append(left_child)
+                self.children.append((left_child,"LEFT"))
 
             right_child = self.move_right()
 
             if right_child is not None:
 
-                self.children.append(right_child)
+                self.children.append((right_child,"RIGHT"))
 
         return self.children
 
@@ -181,31 +181,41 @@ def bfs_search(initial_state):
     frontier=Q.Queue()
     frontier.put(initial_state)
     explored = set()
+    caminho={}
 
-    path_to_goal=[]
     cost_of_path=len(path_to_goal)
     res={}
-    search_depth=max_search_depth=running_time=max_ram_usage=0
+    nodes_expanded=search_depth=max_search_depth=running_time=max_ram_usage=0
     
     while frontier:
         state = frontier.get()
-        explored.add(state)
+        
         if test_goal(state):
-            res["path_to_goal"]=path_to_goal
-			res["cost_of_path"]=cost_of_path
-			res["nodes_expanded"]=nodes_expanded
-			res["search_depth"]=search_depth
-			res["max_search_depth"]=max_search_depth
+                path_to_goal=printCaminho(state,caminho)            
+                res["path_to_goal"]=path_to_goal
+	        res["cost_of_path"]=len(path_to_goal)
+		res["nodes_expanded"]=nodes_expanded
+		res["search_depth"]=search_depth
+		res["max_search_depth"]=max_search_depth
 			
             return res
-
-        for neighbor in state.expand():
-			nodes_expanded+=len(state.expand)
-			search_depth+=1
-			if search_depth > max_search_depth: max_search_depth=search_depth		
+        filhosNo=state.expand()
+        for (neighbor,action) in filhosNo:
+	    nodes_expanded+=len(filhosNo)
+	    search_depth+=1
+	    if search_depth > max_search_depth: max_search_depth=search_depth		
             if neighbor not in frontier and neighbor not in explored:
+		caminho[neighbor]=(state,action)
                 frontier.put(neighbor)
+	explored.add(state)	
 	return False
+
+def printCaminho(state,caminho):
+        lista=[]
+        while caminho[state][0]:
+                state,action=caminho[state]
+                lista.append(action)
+        return lista[::-1]
     
     
 
@@ -258,9 +268,7 @@ def main():
 
     sm = sys.argv[1].lower()
 
-    beg
-
-in_state = sys.argv[2].split(",")
+    begin_state = sys.argv[2].split(",")
 
     begin_state = tuple(map(int, begin_state))
 
