@@ -1,4 +1,5 @@
-import Queue as Q
+#import Queue as Q
+from collections import deque
 
 import time
 
@@ -170,44 +171,49 @@ class PuzzleState(object):
 
 ### Students need to change the method to have the corresponding parameters
 
-def writeOutput():
-	pass
-
+def writeOutput(res):
+    f=open("output.txt","w")
+    for item in res:
+        f.writeln(item)
+    f.close()
     ### Student Code Goes here
 
 def bfs_search(initial_state):
 
     """BFS search"""
 
-    frontier=Q.Queue()
-    frontier.put(initial_state)
+    #frontier=Q.Queue()
+    frontier=deque()
+    #frontier.put(initial_state)
+    frontier.append(initial_state)
     explored = set()
     caminho={}
 
-    cost_of_path=len(path_to_goal)
+    #cost_of_path=len(path_to_goal)
     res={}
     nodes_expanded=search_depth=max_search_depth=running_time=max_ram_usage=0
     
     while frontier:
-        state = frontier.get()
+        #state = frontier.get()
+        state = frontier.popleft()
         
         if test_goal(state):
             path_to_goal=printCaminho(state,caminho)
-            res["path_to_goal"]=path_to_goal
+            res["path"]=path_to_goal
             res["cost_of_path"]=len(path_to_goal)
             res["nodes_expanded"]=nodes_expanded
             res["search_depth"]=search_depth
             res["max_search_depth"]=max_search_depth
             
-        return res
-        filhosNo=state.expand()
+            return res
+        filhosNo=state.expand() #filhosNo eh uma lista
         for (neighbor,action) in filhosNo:
             nodes_expanded+=len(filhosNo)
             search_depth+=1
             if search_depth > max_search_depth: max_search_depth=search_depth       
             if neighbor not in frontier and neighbor not in explored:
                 caminho[neighbor]=(state,action)
-                frontier.put(neighbor)
+                frontier.append(neighbor)
     explored.add(state)	
 	#verificando git
     return False
@@ -280,7 +286,8 @@ def main():
 
     if sm == "bfs":
 
-        bfs_search(hard_state)
+        res=bfs_search(hard_state)
+        writeOutput(res)
 
     elif sm == "dfs":
 
